@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
@@ -52,7 +54,11 @@ fun PokemonDetailScreen(name: String, navController: NavController) {
         }
     ) { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(innerPadding).padding(16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (isLoading) {
@@ -65,10 +71,10 @@ fun PokemonDetailScreen(name: String, navController: NavController) {
                     contentDescription = "Imagem do Pokémon",
                     modifier = Modifier.size(200.dp)
                 )
-                Text("Name: ${detail!!.name.capitalize()}")
+                Text("Name: ${detail!!.name}")
                 Text("Height: ${detail!!.height} dm")
                 Text("Weight: ${detail!!.weight} hg")
-                Text("Types: ${detail!!.types.joinToString { it.type.name.capitalize() }}")
+                Text("Types: ${detail!!.types.joinToString { it.type.name }}")
             }
         }
     }

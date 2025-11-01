@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,7 +15,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -60,7 +61,7 @@ fun PokemonListScreen(onPokemonClick: (String) -> Unit) {
             TopAppBar(title = { Text("Pokémon World") })
         }
     ) { innerPadding ->
-        Column(  // Use Column para empilhar search + lista
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
@@ -71,14 +72,19 @@ fun PokemonListScreen(onPokemonClick: (String) -> Unit) {
                 label = { Text("Filtrar por nome") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 32.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)  // Abaixa mais (aumente top para descer mais)
+                    .padding(top = 32.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)
             )
 
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+            ) {
                 if (error != null) {
                     Text(error!!, color = Color.Red, modifier = Modifier.align(Alignment.Center))
                 } else {
                     LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
                         state = listState,
                         contentPadding = PaddingValues(8.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -87,20 +93,25 @@ fun PokemonListScreen(onPokemonClick: (String) -> Unit) {
                             Card(
                                 onClick = { onPokemonClick(pokemon.name) },
                                 elevation = CardDefaults.cardElevation(4.dp),
-                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+                                colors = CardDefaults.cardColors(containerColor = colorScheme.surfaceVariant),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(80.dp)
                             ) {
                                 Text(
-                                    "${pokemon.name.capitalize()} - ID: ${pokemon.id}",
+                                    "${pokemon.name} - ID: ${pokemon.id}",
                                     modifier = Modifier.padding(16.dp),
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    color = MaterialTheme.colorScheme.onSurface
+                                    style = typography.bodyLarge,
+                                    color = colorScheme.onSurface
                                 )
                             }
                         }
                         if (isLoading) {
                             item {
                                 Box(
-                                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     CircularProgressIndicator()
